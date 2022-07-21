@@ -1,0 +1,27 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-load-balancer-controller
+  namespace: argocd
+spec:
+  destination:
+    namespace: kube-system
+    server: https://kubernetes.default.svc
+  project: tools
+  source:
+    chart: aws-load-balancer-controller
+    repoURL: https://aws.github.io/eks-charts
+    targetRevision: 1.4.2
+    helm:
+      values: |
+        clusterName: k8s-main
+        serviceAccount:
+          name: "aws-load-balancer-controller"
+          annotations:
+            "eks.amazonaws.com/role-arn": "arn:aws:iam::054000737513:role/k8s-main/AWSLoadBalancerController"
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - CreateNamespace=true

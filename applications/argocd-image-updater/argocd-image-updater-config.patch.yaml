@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-image-updater-config
+data:
+  log.level: info
+  registries.conf: |
+    registries:
+    - name: GHCR
+      prefix: ghcr.io
+      api_url: https://ghcr.io/
+      credentials: pullsecret:argocd/ghcr-pull-secret
+      default: true
